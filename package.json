@@ -1,0 +1,68 @@
+{
+  "name": "bright-user",
+  "description": "Simple user service for Bright.md.",
+  "version": "0.0.1",
+  "author": "Sean Hellebusch <sahellebusch@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/sahellebusch/bright-user/issues"
+  },
+  "dependencies": {
+    "@hapi/boom": "^7.4.2",
+    "@hapi/good": "^8.2.0",
+    "@hapi/hapi": "^18.3.1",
+    "@hapi/inert": "^5.2.1",
+    "@hapi/vision": "^5.5.2",
+    "bluebird": "^3.5.5",
+    "good-console": "^8.0.0",
+    "good-squeeze": "^5.1.0",
+    "hapi-swagger": "^10.0.2",
+    "http-status-codes": "^1.3.2",
+    "pg-promise": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.31",
+    "@types/bluebird": "^3.5.27",
+    "@types/bluebird-global": "^3.5.12",
+    "@types/bluebird-retry": "^0.11.4",
+    "@types/hapi__boom": "^7.4.0",
+    "@types/hapi__hapi": "^18.2.5",
+    "@types/hapi__inert": "^5.2.0",
+    "@types/hapi__vision": "^5.5.0",
+    "@types/jest": "^24.0.17",
+    "@types/lodash": "^4.14.136",
+    "@types/node": "^12.7.1",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "aws-lambda": "^0.1.2",
+    "bluebird-retry": "^0.11.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "jest-junit": "^7.0.0",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.3"
+  },
+  "homepage": "https://github.com/sahellebusch/bright-user#readme",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahellebusch/bright-user.git"
+  },
+  "scripts": {
+    "build:dev": "docker build .",
+    "clean": "./bin/clean.sh",
+    "compile": "tsc",
+    "compile:watch": "tsc --watch",
+    "jest": "jest --coverage",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "npm run lint -- --fix",
+    "postinstall": "chmod u+x ./bin/*",
+    "start": "docker-compose up -d --build --remove-orphans",
+    "test": "npm run test:start && npm run test:run",
+    "test:run": "docker-compose -f docker-compose.test.yml -p user-api-test exec api npm run jest",
+    "test:start": "docker-compose -f docker-compose.test.yml -p user-api-test up -d --build --remove-orphans"
+  }
+}

@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  api:
+    build:
+      context: .
+      target: prod
+    command: 'node dist/index.local.js'
+    environment:
+      DB_URL: postgres://root:123@postgres/user
+    volumes:
+      - ./src:/usr/src/app/src
+    ports:
+      - '3000'
+  postgres:
+    build: postgres
