@@ -7,10 +7,11 @@ services:
       target: prod
     command: 'node dist/index.local.js'
     environment:
+      NODE_ENV: 'dev'
       DB_URL: postgres://root:123@postgres/user
     volumes:
       - ./src:/usr/src/app/src
     ports:
-      - '3000'
+      - '3000:3000'
   postgres:
     build: postgres

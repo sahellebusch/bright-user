@@ -1,6 +1,6 @@
 FROM node:lts-slim as dev
 
-WORKDIR /usr/sr/app
+WORKDIR /usr/src/app
 COPY . .
 
 RUN npm install && npm run compile

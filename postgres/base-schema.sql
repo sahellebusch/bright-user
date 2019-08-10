@@ -17,8 +17,9 @@ CREATE TABLE IF NOT EXISTS "user"
 (
   id    SERIAL PRIMARY KEY,
   name  TEXT NOT NULL,
-  email TEXT NOT NULL,
-  phone TEXT NOT NULL
+  email TEXT UNIQUE NOT NULL,
+  phone TEXT NOT NULL,
+  username TEXT UNIQUE NOT NULL
 );
 
 DROP TRIGGER IF EXISTS update_user ON "user";

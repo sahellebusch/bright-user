@@ -7,6 +7,7 @@ import getConnection from '../../../lib/get-connection';
 import waitForDb from '../lib/wait-for-db';
 
 const env = {
+  NODE_ENV: 'dev',
   DB_URL: 'postgres://root:123@postgres/user'
 };
 
@@ -21,7 +22,8 @@ describe('/status', () => {
     buildServer({
       config,
       providedLogger: mockLogger,
-      providedConnection: connection
+      providedConnection: connection,
+      serverLogs: false
     })
       .then(srv => {
         server = srv;

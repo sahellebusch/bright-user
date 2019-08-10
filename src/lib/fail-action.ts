@@ -1,0 +1,18 @@
+import {Request, ResponseToolkit} from '@hapi/hapi';
+import {serverMethods} from '../server';
+
+export default function(
+  request: Request,
+  _: ResponseToolkit,
+  error: Error | undefined
+): Promise<void> {
+  const methods = serverMethods(request);
+  const env = methods.config().get('NODE_ENV');
+
+  if (env === 'dev' || env === 'docker') {
+    const logger = methods.logger();
+    logger.error('Validation Error:', error);
+  }
+
+  return Promise.reject(error);
+}

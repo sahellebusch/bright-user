@@ -8,12 +8,13 @@ import logging from './plugins/logging';
 import documentation from './plugins/documentation'; // for local documentation
 import {IDatabase} from 'pg-promise';
 
-export interface IServerMethods {
+export interface ServerMethods {
   logger(): Logger;
   connection(): IDatabase<unknown>;
+  config(): Config;
 }
 
-export function serverMethods(request: Request): IServerMethods {
+export function serverMethods(request: Request): ServerMethods {
   return request.server.methods as any;
 }
 

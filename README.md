@@ -21,3 +21,8 @@ Note: the tests run in a container that is watching and rebuilding the code as y
 ### API Documentation
 
 Documentation is first class for this API. To view the documentation, start the service locally and then head to `0.0.0.0:3000/documentation` in a browser to view.
+
+
+### TODOs
+
+email, username, phone should be unique. 

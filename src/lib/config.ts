@@ -1,6 +1,7 @@
 import Joi, {Schema as JoiSchema} from '@hapi/joi';
 import pick from 'lodash/pick';
 import logger from './logger';
+import {NodeEnvs} from '../lib/constants';
 
 interface EnvironmentVars {
   [key: string]: any;
@@ -8,7 +9,8 @@ interface EnvironmentVars {
 
 export default class Config {
   /* eslint-disable */
-  static readonly apiConfigSchema: JoiSchema = Joi.object( {
+  static readonly apiConfigSchema: JoiSchema = Joi.object({
+    NODE_ENV: Joi.string().valid(Object.values(NodeEnvs)).required(),
     DB_URL: Joi.string().uri().required()
   });
   /* eslint-enable */
