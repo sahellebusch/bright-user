@@ -14,4 +14,4 @@ services:
   postgres:
     build: postgres
     volumes:
-      - ./postgres/data:/var/lib/postgres/data
+      - ./postgres/data/test:/var/lib/postgres/data

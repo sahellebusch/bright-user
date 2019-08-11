@@ -14,7 +14,8 @@ const env = {
 };
 
 const config = Config.init(env);
-const connection = getConnection(config.get('DB_URL'));
+let connection: IDatabase<unknown>;
+
 const testUsers = [
   {
     name: 'marge',
@@ -41,19 +42,24 @@ function insertTestUsers(): Promise<any> {
 
 describe('/post', () => {
   let server: Server;
-
   beforeAll(() =>
-    buildServer({
-      config,
-      providedLogger: mockLogger,
-      providedConnection: connection,
-      serverLogs: false
-    })
-      .then(srv => {
-        server = srv;
+    getConnection(config)
+      .then(conn => {
+        connection = conn;
       })
-      .then(() => waitForDb(connection))
-      .then(insertTestUsers)
+      .then(() =>
+        buildServer({
+          config,
+          providedLogger: mockLogger,
+          providedConnection: connection,
+          serverLogs: false
+        })
+          .then(srv => {
+            server = srv;
+          })
+          .then(() => waitForDb(connection))
+          .then(insertTestUsers)
+      )
   );
 
   afterAll(() =>

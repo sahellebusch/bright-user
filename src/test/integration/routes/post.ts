@@ -16,11 +16,11 @@ const env = {
 const config = Config.init(env);
 let userId: number;
 
-const connection = getConnection(config.get('DB_URL'));
+let connection: IDatabase<unknown>;
 
 function deleteUser(): Promise<any> {
   if (userId) {
-    return Promise.resolve(connection.none(`DELETE FROM "user" WHERE id = ${userId}`))
+    return Promise.resolve(connection.none(`DELETE FROM "user" WHERE id = ${userId}`));
   }
 
   return Promise.resolve();
@@ -30,16 +30,22 @@ describe('/post', () => {
   let server: Server;
 
   beforeAll(() =>
-    buildServer({
-      config,
-      providedLogger: mockLogger,
-      providedConnection: connection,
-      serverLogs: false
-    })
-      .then(srv => {
-        server = srv;
+    getConnection(config)
+      .then(conn => {
+        connection = conn;
       })
-      .then(() => waitForDb(connection))
+      .then(() =>
+        buildServer({
+          config,
+          providedLogger: mockLogger,
+          providedConnection: connection,
+          serverLogs: false
+        })
+          .then(srv => {
+            server = srv;
+          })
+          .then(() => waitForDb(connection))
+      )
   );
 
   afterEach(deleteUser);

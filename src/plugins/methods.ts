@@ -18,12 +18,11 @@ export default {
   version: packageInfo.version,
   register: (server: Server, options: MethodOptions) => {
     const logger = options.logger || defaultLogger;
-    const connection = options.connection || getConnection(options.config.get('DB_URL'));
 
-    server.method('logger', (() => logger) as any);
-    server.method('connection', (() => connection) as any);
-    server.method('config', (() => options.config) as any);
-
-    return Promise.resolve();
+    return Promise.resolve(options.connection || getConnection(options.config)).then(connection => {
+      server.method('logger', (() => logger) as any);
+      server.method('connection', (() => connection) as any);
+      server.method('config', (() => options.config) as any);
+    });
   }
 };

@@ -1,4 +1,4 @@
-import {Server} from '@hapi/hapi';
+import {Server, ServerInjectResponse} from '@hapi/hapi';
 import {APIGatewayEvent} from 'aws-lambda';
 import buildServer from './server';
 import {LambdaResponse} from './lib/lambda-response';
@@ -7,8 +7,8 @@ import Config from './lib/config';
 const config = Config.init();
 let server: Server;
 
-async function inject(options: any): Promise<any> {
-  return await server.inject(options).then(({result}: any) => result);
+async function inject(options: any): Promise<ServerInjectResponse> {
+  return await server.inject(options);
 }
 
 exports.handler = async (event: APIGatewayEvent): Promise<any> => {
@@ -24,6 +24,6 @@ exports.handler = async (event: APIGatewayEvent): Promise<any> => {
     validate: false
   };
 
-  const {statusCode, payload} = (await inject(options)) as any;
+  const {statusCode, payload} = (await inject(options)) as ServerInjectResponse;
   return new LambdaResponse(statusCode, {body: payload});
 };

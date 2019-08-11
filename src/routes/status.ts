@@ -1,11 +1,8 @@
 import {ServerRoute} from '@hapi/hapi';
+import {StatusCodes} from '../lib/lambda-response';
 
-export interface StatusResponse {
-  status: 'Ok';
-}
-
-function getStatus(): StatusResponse {
-  return {status: 'Ok'};
+function getStatus(): any {
+  return {statusCode: StatusCodes.OK};
 }
 
 const route: ServerRoute = {
