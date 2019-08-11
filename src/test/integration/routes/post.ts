@@ -14,12 +14,20 @@ const env = {
 };
 
 const config = Config.init(env);
+let userId: number;
 
 const connection = getConnection(config.get('DB_URL'));
 
+function deleteUser(): Promise<any> {
+  if (userId) {
+    return Promise.resolve(connection.none(`DELETE FROM "user" WHERE id = ${userId}`))
+  }
+
+  return Promise.resolve();
+}
+
 describe('/post', () => {
   let server: Server;
-  let insertedUserId: number;
 
   beforeAll(() =>
     buildServer({
@@ -34,7 +42,7 @@ describe('/post', () => {
       .then(() => waitForDb(connection))
   );
 
-  afterEach(() => connection.none(`DELETE FROM "user" WHERE id = ${insertedUserId}`));
+  afterEach(deleteUser);
 
   test('returns the id of a newly inserted member', () => {
     const payload = {
@@ -57,7 +65,7 @@ describe('/post', () => {
         expect(typeof response.id).toBe('number');
 
         // @ts-ignore
-        insertedUserId = response.id;
+        userId = response.id;
 
         // @ts-ignore
         return connection.one(`SELECT * FROM "user" WHERE id = ${response.id}`).then(result => {
@@ -71,17 +79,35 @@ describe('/post', () => {
 
   test('will return a 409 when the user already exists', () => {
     const payload = {
-      name: 'Homer Simpson',
+      name: 'Mr. Rogers',
       phone: '123-456-7890',
-      username: 'mrsimpson',
-      email: 'mrsimpson@test'
+      username: 'mr.rogers',
+      email: 'mr.rogers@test.com'
     };
 
-    return server.inject({
-      method: 'POST',
-      url: '/user',
-      payload
-    });
+    const expectdMessage = `User with email "${payload.email} already exists`;
+
+    return connection
+      .one(
+        `INSERT INTO "user"(name, email, phone, username)
+         VALUES($[name], $[email], $[phone], $[username]) RETURNING id`,
+        payload
+      )
+      .then(({id}) => {
+        userId = id;
+        return server
+          .inject({
+            method: 'POST',
+            url: '/user',
+            payload
+          })
+          .then(({statusCode, result}) => {
+            expect(statusCode).toEqual(httpStatus.CONFLICT);
+
+            // @ts-ignore
+            expect(result.message).toEqual(expectdMessage);
+          });
+      });
   });
 
   test('will return a 400 with no name', () => {

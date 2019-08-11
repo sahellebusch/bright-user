@@ -10,6 +10,7 @@ services:
       DB_URL: postgres://root:123@postgres/user
     volumes:
       - ./src:/usr/src/app/src
+      - ./jest.config.js:/usr/src/app/jest.config.js
   postgres:
     build: postgres
     volumes:

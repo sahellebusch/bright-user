@@ -44,7 +44,7 @@ export default function postUser(request: Request): Promise<number> {
   return Promise.resolve(
     checkUserExists(connection, logger, user.email).then(exists => {
       if (exists) {
-        return Boom.conflict('User with email "${user.email} already exists');
+        return Boom.conflict(`User with email "${user.email} already exists`);
       }
 
       return connection

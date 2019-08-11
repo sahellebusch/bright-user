@@ -1,52 +1,45 @@
 import Joi from '@hapi/joi';
 import {ServerRoute} from '@hapi/hapi';
 import failAction from '../lib/fail-action';
-import handler from '../handler/insert-user';
+import selectUserByEmail from '../handler/select-user';
 
 /* eslint-disable */
 const userSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
   phone: Joi.string().required(),
-  username: Joi.string().min(3).required()
-})
-
-const responseSchema = Joi.object({
-  id: Joi.number().min(1).required()
+  username: Joi.string().alphanum().min(3).required()
 });
+
+const emailSchema =Joi.string();
 /* eslint-enable */
 
-const route: ServerRoute = {
-  method: 'POST',
-  path: '/user',
+const getByEmail: ServerRoute = {
+  method: 'GET',
+  path: '/user/{email}',
   options: {
     auth: false,
-    handler,
-    description: 'Create a User.',
-    notes: 'Returns id of newly created user.',
+    handler: selectUserByEmail,
+    description: 'Get user by email.',
+    notes: 'Returns a user.',
     tags: ['api'],
-    payload: {
-      parse: true
+    response: {
+      schema: userSchema
     },
     cors: {
       origin: ['*']
     },
     validate: {
-      payload: userSchema,
-      failAction
-    },
-    response: {
-      schema: responseSchema
+      failAction,
+      params: {
+        email: emailSchema
+      }
     },
     plugins: {
       'hapi-swagger': {
-        payloadType: 'form',
         responses: {
-          '201': {
+          '200': {
             description: 'Success'
-          },
-          '400': {
-            description: 'Invalid or missing parameter'
           },
           '500': {
             description: 'Internal Server Error'
@@ -57,4 +50,4 @@ const route: ServerRoute = {
   }
 };
 
-export default route;
+export default getByEmail;

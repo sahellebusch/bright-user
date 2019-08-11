@@ -25,4 +25,6 @@ Documentation is first class for this API. To view the documentation, start the 
 
 ### TODOs
 
-email, username, phone should be unique. 
+* email, username, phone should be unique
+* dynamic query params for GET user route
+* make types and joi schemas reusable
