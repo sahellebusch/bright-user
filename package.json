@@ -1,7 +1,7 @@
 {
   "name": "bright-user",
   "description": "Simple user service for Bright.md.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Sean Hellebusch <sahellebusch@gmail.com>",
   "bugs": {
     "url": "https://github.com/sahellebusch/bright-user/issues"
