@@ -1,10 +1,5 @@
 import HttpStatusCodes from 'http-status-codes';
 
-export interface ILambdaResponse {
-  statusCode: number;
-  body: any;
-}
-
 type Nullable<T> = T | null;
 
 export const StatusCodes = HttpStatusCodes;

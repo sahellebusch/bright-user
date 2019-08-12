@@ -4,13 +4,7 @@ import {serverMethods} from '../server';
 import Boom from '@hapi/boom';
 import {IDatabase} from 'pg-promise';
 import {Logger} from '../lib/logger';
-
-interface UserPayload {
-  email: string;
-  phone: string;
-  name: string;
-  username: string;
-}
+import {User} from '../types';
 
 const CHECK_EMAIL_SQL = `
   SELECT EXISTS(SELECT id FROM "user" WHERE email = $[email])
@@ -35,12 +29,12 @@ function checkUserExists(
     });
 }
 
-export default function postUser(request: Request): Promise<number> {
+export default function insertUser(request: Request): Promise<number> {
   const methods = serverMethods(request);
   const connection = methods.connection();
   const logger = methods.logger();
+  const user = request.payload as User;
 
-  const user = request.payload as UserPayload;
   return Promise.resolve(
     checkUserExists(connection, logger, user.email).then(exists => {
       if (exists) {

@@ -7,7 +7,7 @@ services:
       target: prod
     command: 'node dist/index.local.js'
     environment:
-      NODE_ENV: 'dev'
+      NODE_ENV: 'docker'
       DB_URL: postgres://root:123@postgres/user
     volumes:
       - ./src:/usr/src/app/src

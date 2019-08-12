@@ -1,16 +1,10 @@
 import Joi from '@hapi/joi';
 import {ServerRoute} from '@hapi/hapi';
 import failAction from '../lib/fail-action';
-import handler from '../handler/insert-user';
+import insertUser from '../handler/insert-user';
+import {UserSchema} from '../lib/schemas';
 
 /* eslint-disable */
-const userSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  phone: Joi.string().required(),
-  username: Joi.string().min(3).required()
-})
-
 const responseSchema = Joi.object({
   id: Joi.number().min(1).required()
 });
@@ -21,7 +15,7 @@ const route: ServerRoute = {
   path: '/user',
   options: {
     auth: false,
-    handler,
+    handler: insertUser,
     description: 'Create a User.',
     notes: 'Returns id of newly created user.',
     tags: ['api'],
@@ -32,7 +26,7 @@ const route: ServerRoute = {
       origin: ['*']
     },
     validate: {
-      payload: userSchema,
+      payload: UserSchema,
       failAction
     },
     response: {

@@ -2,21 +2,19 @@ import Promise from 'bluebird';
 import {Request, Util} from '@hapi/hapi';
 import {serverMethods} from '../server';
 import Boom from '@hapi/boom';
-
-interface UserResponse {
-  email: string;
-  phone: string;
-  name: string;
-  username: string;
-}
+import {User} from '../types';
 
 const SELECT_BY_EMAIL = `
-  SELECT name, phone, email, username
+  SELECT
+    name,
+    phone,
+    email,
+    username
   FROM "user"
   WHERE email = $[email]
 `;
 
-export default function getUser(request: Request): Promise<UserResponse> {
+export default function selectUserByEmail(request: Request): Promise<User> {
   const methods = serverMethods(request);
   const connection = methods.connection();
   const logger = methods.logger();

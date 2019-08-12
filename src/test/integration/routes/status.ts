@@ -44,7 +44,6 @@ describe('/status', () => {
         url: '/status'
       })
      .then(({statusCode, result: response}) => {
-       console.log(statusCode, response);
         expect(statusCode).toEqual(httpStatus.OK);
         expect(response).toEqual({statusCode: httpStatus.OK});
       }));

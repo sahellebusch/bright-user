@@ -6,7 +6,7 @@ import Config from './config';
 
 const secretsManager = new AWS.SecretsManager();
 
-export default function(config: Config): Promise<IDatabase<unknown>> {
+export default function getConnection(config: Config): Promise<IDatabase<unknown>> {
   const nodeEnv = config.get('NODE_ENV');
 
   if (nodeEnv === NodeEnvs.DEV || nodeEnv === NodeEnvs.DOCKER) {

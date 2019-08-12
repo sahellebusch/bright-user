@@ -2,16 +2,10 @@ import Joi from '@hapi/joi';
 import {ServerRoute} from '@hapi/hapi';
 import failAction from '../lib/fail-action';
 import selectUserByEmail from '../handler/select-user';
+import {UserSchema} from '../lib/schemas';
 
 /* eslint-disable */
-const userSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  phone: Joi.string().required(),
-  username: Joi.string().alphanum().min(3).required()
-});
-
-const emailSchema =Joi.string();
+const emailSchema =Joi.string(); // don't care about the domain atoms here, let them pass whatever they want
 /* eslint-enable */
 
 const getByEmail: ServerRoute = {
@@ -24,7 +18,7 @@ const getByEmail: ServerRoute = {
     notes: 'Returns a user.',
     tags: ['api'],
     response: {
-      schema: userSchema
+      schema: UserSchema
     },
     cors: {
       origin: ['*']
